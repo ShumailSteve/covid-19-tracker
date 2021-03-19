@@ -6,12 +6,16 @@ import Table from './Table';
 import { sortData } from './utils';
 import './App.css';
 import LineGraph from './LineGraph';
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState('worldwide');
   const [countryInfo, setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
+  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
+  const [mapZoom, setMapZoom] = useState(3);
+const [mapCountries, setMapCountries] = useState([]);
 
   // Only runs once when the component loads 
   useEffect(() => {
@@ -31,15 +35,18 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           const countries = data.map((country) => ({
-            name: country.country,
-            value: country.countryInfo.iso2
+            name: country.country,  // United States
+            value: country.countryInfo.iso2   //USA
           }));
 
           // Sort cases wise (decending)
           const sortedData = sortData(data);
-
+  
           // Set tableData to all sorted data
           setTableData(sortedData);
+          
+          //set mapCountries to fetched data
+          setMapCountries(data);
 
           // Countries List 
           setCountries(countries);
@@ -61,6 +68,12 @@ function App() {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
+
+        // console.log(data.countryInfo.lat, data.countryInfo.long);
+
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        
+        setMapZoom(4);
       });
   }
 
@@ -75,7 +88,7 @@ function App() {
             <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
                 <MenuItem value={country.value}>{country.name}</MenuItem>
-              ))}        
+              ))}         
             </Select>
           </FormControl>
         </div>
@@ -91,8 +104,13 @@ function App() {
           {/* Deaths Cases */}
           <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths} />
         </div>
+
          {/* Maps */}
-        <Map />
+        <Map
+          countries={mapCountries}
+          center={mapCenter}
+          zoom={mapZoom}
+        />
       </div>
 
       <Card className="app__right">
