@@ -3,7 +3,7 @@ import { FormControl, Select, MenuItem, Card, CardContent } from '@material-ui/c
 import InfoBox from './InfoBox';
 import Map from './Map';
 import Table from './Table';
-import { sortData } from './utils';
+import { sortData, prettyPrintStat } from './utils';
 import './App.css';
 import LineGraph from './LineGraph';
 import 'leaflet/dist/leaflet.css';
@@ -96,13 +96,25 @@ const [mapCountries, setMapCountries] = useState([]);
           {/* STATS */}
         <div className="app__stats">
           {/* Coronavirus Cases */}
-          <InfoBox title="Coronavirus Cases" cases={countryInfo.todayCases} total={countryInfo.cases} />
+          <InfoBox
+            title="Coronavirus Cases"
+            cases={prettyPrintStat(countryInfo.todayCases)}
+            total={prettyPrintStat(countryInfo.cases)}
+          />
 
           {/* Recovered Cases */}
-          <InfoBox title="Recoverd" cases={countryInfo.todayRecovered} total={countryInfo.recovered} />
+          <InfoBox
+            title="Recoverd"
+            cases={prettyPrintStat(countryInfo.todayRecovered)}
+            total={prettyPrintStat(countryInfo.recovered)}
+          />
 
           {/* Deaths Cases */}
-          <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths} />
+          <InfoBox
+            title="Deaths"
+            cases={prettyPrintStat(countryInfo.todayDeaths)}
+            total={prettyPrintStat(countryInfo.deaths)}
+          />
         </div>
 
          {/* Maps */}
