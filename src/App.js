@@ -20,7 +20,7 @@ function App() {
 
   // Only runs once when the component loads 
   useEffect(() => {
-      fetch('http://disease.sh/v3/covid-19/all')
+      fetch('https://disease.sh/v3/covid-19/all')
       .then((res) => res.json())
       .then((data) => {
         setCountryInfo(data);
@@ -32,7 +32,7 @@ function App() {
   useEffect(() => {
 
     const getCountriesData = async () => {
-      await fetch("http://disease.sh/v3/covid-19/countries")
+      await fetch("https://disease.sh/v3/covid-19/countries")
         .then((res) => res.json())
         .then((data) => {
           const countries = data.map((country) => ({
@@ -61,8 +61,8 @@ function App() {
   const onCountryChange = async (event) => {
     const countryCode = event.target.value;    
 
-    const url = countryCode === "worldwide" ? 'http://disease.sh/v3/covid-19/all' :
-      `http://disease.sh/v3/covid-19/countries/${countryCode}`;
+    const url = countryCode === "worldwide" ? 'https://disease.sh/v3/covid-19/all' :
+      `https://disease.sh/v3/covid-19/countries/${countryCode}`;
     
     await fetch(url)
       .then((res) => res.json())
@@ -71,10 +71,13 @@ function App() {
         setCountryInfo(data);
 
         // console.log(data.countryInfo.lat, data.countryInfo.long);
-
-        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-        
-        setMapZoom(4);
+        if (countryCode === "worldwide") {
+          setMapCenter([34.80746, -40.4796]);
+          setMapZoom(3)
+        } else {
+          setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+          setMapZoom(4);
+        }       
       });
   }
 
@@ -101,7 +104,7 @@ function App() {
             isRed
             active={casesType === "cases"}
             onClick = { (e) => setCaseType("cases")}
-            title="Coronavirus Cases"
+            title="Cases"
             cases={prettyPrintStat(countryInfo.todayCases)}
             total={prettyPrintStat(countryInfo.cases)}
           />
