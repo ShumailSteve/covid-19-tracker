@@ -86,7 +86,7 @@ function App() {
       <div className="app__left">
           {/* Header */}
         <div className="app__header">
-          <h1>Covid 19 Tracker</h1>
+          <h1>React Covid 19 Tracker</h1>
           <FormControl className="app__dropdown">
             <Select variant="outlined" onChange={onCountryChange} value={country}>
             <MenuItem value="worldwide">Worldwide</MenuItem>
